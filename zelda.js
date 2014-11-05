@@ -165,12 +165,12 @@ function npmInstall (cwd, cb) {
   var pkgName = path.basename(cwd)
   console.log('NPM INSTALL: ' + pkgName, cwd)
 
-  var child = cp.spawn('npm', ['install'], { cwd: cwd, stdio: 'inherit' })
-
-  child.on('exit', function () {
-    cb(null)
+  var child = cp.exec('npm --color=true install', { cwd: cwd }, function (error/*, stdout, stderr*/) {
+    cb(error);
   })
-  child.on('error', cb)
+
+  child.stdout.pipe(process.stdout)
+  child.stderr.pipe(process.stderr)
 }
 
 function getDeps (pkg) {
